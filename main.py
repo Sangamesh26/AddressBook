@@ -28,7 +28,6 @@ class PhoneInput(AddressBookInputs):
         phone = input("Enter your phone number : ")
         return phone
 
-
 # Class for the address
 class AddressBook:
     
@@ -54,6 +53,14 @@ class AddressBook:
         AddressBook.address_by_phone[self.phone] = {"First_name": self.first_name,"Last_name": self.last_name, "Address": self.address, "Phone": self.phone}
         AddressBook.address_by_name[f"{self.first_name} {self.last_name}"] = {"First_name": self.first_name,"Last_name": self.last_name, "Address": self.address, "Phone": self.phone}
         print("Successfully added in address book")
+    
+    # Search in address book by name (Here name is the combination of first_name {space} last_name)
+    def search_by_name(self, name_to_search):
+        print(AddressBook.address_by_name.get(name_to_search, f"{name_to_search} not found in address book"))
+    
+    # Search in address book by phone
+    def search_by_phone(self, phone_to_search):
+        print(AddressBook.address_by_phone.get(phone_to_search, f"{phone_to_search} not found in address book"))
         
 class Client:
     def __init__(self, address_book):
@@ -64,14 +71,34 @@ class Client:
         self.address_book.inputs()
         # Add address in the book
         self.address_book.add_in_address_book()
-        
+    
+    def search_by_name(self):
+        # Taking input
+        name_to_search = input("Enter the name to search in address book : ")
+        # Search by in the book
+        self.address_book.search_by_name(name_to_search)
+    
+    def search_by_phone(self):
+        # Taking input
+        phone_to_search = input("Enter the phone to search in address book : ")
+        # Search by phone in the book
+        self.address_book.search_by_phone(phone_to_search)
 
 if __name__ == "__main__":
     address_book_input = AddressBook()
     client = Client(address_book_input)
     
-    client.add_address()
-    
-    
-
-        
+    # actions
+    while True:
+        action = input("Enter Add for adding in address book, Search for searching address and any other type to exit : ")
+        if action == "Add":
+            client.add_address()
+        elif action == "Search":
+            search_action = input("Type Name for searching by name, type Phone for searching by phone : ")
+            if search_action == "Name":
+                client.search_by_name()
+            else:
+                client.search_by_phone()
+        else:
+            print("Closing the address book, all your added address will be lost")
+            break
